@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainMenuFragment">
+
+    <fragment
+        android:id="@+id/mainMenuFragment"
+        android:name="com.example.happyshopper.presentation.ui.main_menu.MainMenuFragment"
+        android:label="MainMenuFragment" >
+        <action
+            android:id="@+id/action_mainMenuFragment_to_trolleyPickingFragment"
+            app:destination="@id/trolleyPickingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/trolleyPickingFragment"
+        android:name="com.example.happyshopper.presentation.ui.trolley_picking.TrolleyPickingFragment"
+        android:label="TrolleyPickingFragment" >
+        <action
+            android:id="@+id/action_trolleyPickingFragment_to_scanCratesFragment"
+            app:destination="@id/scanCratesFragment" />
+        <action
+            android:id="@+id/action_trolleyPickingFragment_to_mainMenuFragment"
+            app:destination="@id/mainMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scanCratesFragment"
+        android:name="com.example.happyshopper.presentation.ui.scan_crates.ScanCratesFragment"
+        android:label="ScanCratesFragment" >
+        <action
+            android:id="@+id/action_scanCratesFragment_to_pickingFragment"
+            app:destination="@id/pickingFragment" />
+        <action
+            android:id="@+id/action_scanCratesFragment_to_trolleyPickingFragment"
+            app:destination="@id/trolleyPickingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pickingFragment"
+        android:name="com.example.happyshopper.presentation.ui.picking.PickingFragment"
+        android:label="PickingFragment" >
+        <action
+            android:id="@+id/action_pickingFragment_to_itemListFragment"
+            app:destination="@id/itemListFragment" />
+        <action
+            android:id="@+id/action_pickingFragment_self"
+            app:destination="@id/pickingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemListFragment"
+        android:name="com.example.happyshopper.presentation.ui.item_list.ItemListFragment"
+        android:label="ItemListFragment" >
+        <action
+            android:id="@+id/action_itemListFragment_to_pickingFragment"
+            app:destination="@id/pickingFragment" />
+    </fragment>
+</navigation>

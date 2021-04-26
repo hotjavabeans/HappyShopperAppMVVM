@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.happyshopper.R
 import com.example.happyshopper.presentation.ui.components.PicklistCard
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,10 +24,11 @@ class ItemListFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             setContent {
                 val items = viewModel.picklists.value
+
 
                 Column(modifier = Modifier
                     .fillMaxSize()
@@ -35,7 +38,16 @@ class ItemListFragment: Fragment() {
                         itemsIndexed(
                             items = items
                         ) { index, picklist ->
-                            PicklistCard(picklist = picklist, onClick = {})
+                            PicklistCard(picklist = picklist, onClick =
+                            {
+                                if (picklist.id != null) {
+                                    val bundle = Bundle()
+                                    bundle.putInt("itemId", picklist.id)
+                                    findNavController().navigate(
+                                        R.id.action_itemListFragment_to_pickingFragment, bundle)
+                                }
+                            }
+                            )
                         }
                     }
                 }

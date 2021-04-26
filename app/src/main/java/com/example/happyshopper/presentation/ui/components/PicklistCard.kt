@@ -12,12 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.happyshopper.R
 import com.example.happyshopper.domain.model.Picklist
+import com.example.happyshopper.util.DEFAULT_RECIPE_IMAGE
+import com.example.happyshopper.util.loadPicture
 
 @Composable
 fun PicklistCard(

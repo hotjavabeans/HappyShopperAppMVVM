@@ -22,6 +22,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.happyshopper.R
+import com.example.happyshopper.presentation.ui.components.CircularIndeterminateProgressBar
+import com.example.happyshopper.presentation.ui.components.TrolleyPickingButtons
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,10 +34,11 @@ class TrolleyPickingFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                val picklist = viewModel.picklists.value
+                val picklists = viewModel.picklists.value
+                val loading = viewModel.loading.value
                 Column(
                     modifier = Modifier
                         .background(color = Color(0xFFF2F2F2))
@@ -52,75 +55,9 @@ class TrolleyPickingFragment: Fragment() {
                             .clip(RoundedCornerShape(12.dp)),
                         contentScale = ContentScale.Crop,
                     )
-                    Column(
-                        modifier = Modifier
-                            .padding(16.dp)
-//                    .border(border = BorderStroke(1.dp, Color.Black))
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight()
-                                .padding(16.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            OutlinedButton(
-                                onClick = { findNavController().navigate(R.id.action_trolleyPickingFragment_to_scanCratesFragment) },
-                                shape = RoundedCornerShape(10),
-                                modifier = Modifier
-                                    .height(50.dp)
-                            ) {
-                                Text(text = "Ambient: ${picklist.size}", fontSize = 20.sp)
-                            }
-                            OutlinedButton(
-                                onClick = {},
-                                shape = RoundedCornerShape(10),
-                                modifier = Modifier
-                                    .height(50.dp)
-                            ) {
-                                Text(text = "Chilled", fontSize = 20.sp)
-                            }
-                        }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight()
-                                .padding(16.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            OutlinedButton(
-                                onClick = {},
-                                shape = RoundedCornerShape(10),
-                                modifier = Modifier
-                                    .height(50.dp)
-                            ) {
-                                Text(text = "Frozen", fontSize = 20.sp)
-                            }
-                            OutlinedButton(
-                                onClick = {},
-                                shape = RoundedCornerShape(10),
-                                modifier = Modifier
-                                    .height(50.dp)
-                            ) {
-                                Text(text = "Produce", fontSize = 20.sp)
-                            }
-                        }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight()
-                                .padding(16.dp),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            OutlinedButton(
-                                onClick = { findNavController().navigate(R.id.action_trolleyPickingFragment_to_mainMenuFragment) },
-                                shape = RoundedCornerShape(10),
-                                modifier = Modifier
-                                    .height(50.dp)
-                            ) {
-                                Text(text = "Main Menu", fontSize = 20.sp)
-                            }
-                        }
+                    TrolleyPickingButtons(picklists = picklists, navController = findNavController())
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        CircularIndeterminateProgressBar(isDisplayed = loading)
                     }
                 }
             }

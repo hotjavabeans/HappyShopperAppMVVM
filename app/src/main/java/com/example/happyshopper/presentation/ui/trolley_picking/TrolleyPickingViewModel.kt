@@ -19,15 +19,30 @@ constructor(
     private @Named("auth_token") val token: String
 ): ViewModel() {
     val picklists: MutableState<List<Picklist>> = mutableStateOf(listOf())
+    val loading = mutableStateOf(false)
 
     init {
-        viewModelScope.launch {
+        newSearch()
+       /* viewModelScope.launch {
             val result = repository.search(
                 token = token,
                 page = 2,
                 query = ""
             )
             picklists.value = result
+        }*/
+    }
+
+    fun newSearch() {
+        viewModelScope.launch {
+            loading.value = true
+            val result = repository.search(
+                token = token,
+                page = 1,
+                query = ""
+            )
+            picklists.value = result
+            loading.value = false
         }
     }
 }

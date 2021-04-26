@@ -1,10 +1,10 @@
 package com.example.happyshopper.presentation.ui.scan_crates
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.happyshopper.R
-import com.example.happyshopper.util.TAG
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,10 +31,10 @@ class ScanCratesFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                val picklists = viewModel.picklist.value
+                val picklists = viewModel.picklists.value
 
                 Column(
                     modifier = Modifier
@@ -52,7 +51,18 @@ class ScanCratesFragment : Fragment() {
                             .background(color = Color.LightGray)
                     ) {
                         OutlinedButton(
-                            onClick = { findNavController().navigate(R.id.action_scanCratesFragment_to_pickingFragment) },
+                            onClick = {
+                                if (picklists[0].id != null) {
+                                    val bundle = Bundle()
+                                    picklists[0].id?.let { bundle.putInt("id", it) }
+                                    findNavController().navigate(
+                                        R.id.action_scanCratesFragment_to_pickingFragment,
+                                        bundle
+                                    )
+                                } else {
+                                    Toast.makeText(requireContext(), "Failed to load item list", Toast.LENGTH_SHORT).show()
+                                }
+                            },
                             modifier = Modifier
                                 .height(50.dp)
                         ) {

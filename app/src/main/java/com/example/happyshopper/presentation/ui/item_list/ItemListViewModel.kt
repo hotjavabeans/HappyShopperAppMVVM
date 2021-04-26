@@ -18,10 +18,9 @@ constructor(
     private val repository: PicklistRepository,
     private @Named("auth_token") val token: String
 ) : ViewModel() {
+
     val picklists: MutableState<List<Picklist>> = mutableStateOf(ArrayList())
-//    val id: MutableState<Int> = mutableStateOf(0)
-//    val selectedItem = mutableStateOf(null)
-//    val query = mutableStateOf("") /*eg "ambient/frozen"*/
+
 
     init {
         newSearch()
@@ -31,18 +30,9 @@ constructor(
             val result = repository.search(
                 token = token,
                 page = 1,
-                query = "chicken"
+                query = ""
             )
             picklists.value = result
         }
     }
-    /*fun getId(id: Int) {
-        viewModelScope.launch {
-            val result = repository.get(
-                token = token,
-                id = 584
-            )
-            id.value = result.id
-        }
-    }*/
 }

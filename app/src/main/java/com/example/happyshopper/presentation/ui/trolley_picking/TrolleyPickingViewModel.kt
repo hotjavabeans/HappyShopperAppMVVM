@@ -38,7 +38,7 @@ constructor(
             loading.value = true
             val result = repository.search(
                 token = token,
-                page = 1,
+                page = 10,
                 query = ""
             )
             picklists.value = result

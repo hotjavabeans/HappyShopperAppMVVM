@@ -19,21 +19,25 @@ constructor(
     private @Named("auth_token") val token: String
 ): ViewModel() {
     val picklist: MutableState<Picklist?> = mutableStateOf(null)
-//    val picklist: MutableState<Picklist> = mutableStateOf(Picklist())
     val picklists: MutableState<List<Picklist>> = mutableStateOf(ArrayList())
     val loading = mutableStateOf(false)
     val firstItem: MutableState<Picklist?> = mutableStateOf(null)
-
+    var scannedInCount: MutableState<Int> = mutableStateOf(0)
+    lateinit var iterator: ListIterator<Picklist>
 
     init {
         newSearch()
-//        getFirstItem()
-//        newGet(2079)
     }
-   /* fun getFirstItem() {
-        val first = picklists.value.first()
-        firstItem.value = first
-    }*/
+
+    fun scanItemIn() {
+//        test param:
+        //Test if correct barcode, quantity etc. If successful:
+
+        if (iterator.hasNext()) {
+            picklist.value = iterator.next()
+            scannedInCount.value++
+        }
+    }
 
     fun newGet(id: Int) {
         viewModelScope.launch {
@@ -51,12 +55,13 @@ constructor(
             loading.value = true
             val result = repository.search(
                 token = token,
-                page = 1,
+                page = 10,
                 query = ""
             )
             picklists.value = result
             firstItem.value = result[0]
             loading.value = false
+            iterator = picklists.value.listIterator()
         }
     }
 }

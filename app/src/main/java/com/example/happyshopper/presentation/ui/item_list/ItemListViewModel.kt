@@ -29,7 +29,7 @@ constructor(
         viewModelScope.launch {
             val result = repository.search(
                 token = token,
-                page = 1,
+                page = 10,
                 query = ""
             )
             picklists.value = result

@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -41,14 +42,11 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class PickingFragment : Fragment() {
     val viewModel: PickingViewModel by viewModels()
-    private var itemId: MutableState<Int?> = mutableStateOf(null)
+    private var itemId: MutableState<Int> = mutableStateOf(0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        from scanCrates
-       /* arguments?.getInt("id")?.let { firstId ->
-            itemId.value = firstId
-        }*/
+
 //        from itemList
         arguments?.getInt("itemId")?.let { iId ->
             if (iId != 0) {
@@ -56,13 +54,6 @@ class PickingFragment : Fragment() {
             } else {
                 return
             }
-            /*
-            try {
-                viewModel.newGet(iId)
-            } catch (e: Exception) {
-                Log.e(TAG, "launchJob: Exception: ${e}, ${e.cause}")
-                e.printStackTrace()
-            }*/
         }
     }
 
@@ -78,6 +69,7 @@ class PickingFragment : Fragment() {
                 val picklists = viewModel.picklists.value
                 val firstItem = viewModel.firstItem.value
                 val loading = viewModel.loading.value
+                val scannedCount = viewModel.scannedInCount.value
 
                 Column(
                     modifier = Modifier
@@ -91,15 +83,41 @@ class PickingFragment : Fragment() {
                             .border(border = BorderStroke(1.dp, Black))
                     )
                     {
-                        Text(
-                            text = if (itemId.value != null) {
-                                "LOCATION: ${itemId.value}"
-                            } else {
-                                "Loading..."
-                            },
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
+                        Row() {
+                            Text(
+                                text = if (itemId.value != 0) {
+                                    picklist?.id.let { id ->
+                                        "LOCATION: $id"
+                                    }
+//                                    "LOCATION: ${itemId.value}"
+                                } else if(firstItem != null) {
+                                    firstItem?.id.let { id ->
+                                        "LOCATION: $id"
+                                    }
+//                                    "LOCATION: ${firstItem.id}"
+                                } else {
+                                    "Loading..."
+                                },
+                                modifier = Modifier
+                                    .weight(2f)
+                                    .padding(start = 4.dp)
+//                                    .align(Alignment.CenterHorizontally)
+                            )
+                            Text(
+                                text = "$scannedCount/${picklists.size}"
+                                /*if (itemId.value != null) {
+                                    "${itemId.value}/${picklists.size}"
+                                } else {
+                                    "${firstItem?.id}/${picklists.size}"
+                                }*/,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(end = 4.dp, bottom = 4.dp),
+                                textAlign = TextAlign.Right
+//                                    .align(Alignment.End)
+                            )
+
+                        }
 
                         Row(
                             modifier = Modifier
@@ -156,7 +174,7 @@ class PickingFragment : Fragment() {
 
                         Row(
                             modifier = Modifier
-                                .padding(4.dp)
+                                .padding(start = 4.dp)
                                 /*.border(border = BorderStroke(1.dp, Black))*/
                                 .fillMaxWidth()
                                 .height(100.dp)
@@ -164,14 +182,7 @@ class PickingFragment : Fragment() {
                             Box(
                                 Modifier.weight(2f)
                             ) {
-                                /*Text(text = if (firstItem != null) {
-                                    "DESCRIPTION: ${picklists.firstOrNull().title}"
-                                } else {
-                                    picklist?.title.let { title ->
-                                        "DESCRIPTION: $title"
-                                    }
-                                })*/
-                                if (itemId.value != null) {
+                                if (itemId.value != 0) {
                                     Text(text = picklist?.title.let { title ->
                                         "DESCRIPTION: $title"
                                     })
@@ -186,18 +197,12 @@ class PickingFragment : Fragment() {
                                 Modifier
                                     .weight(1f)
                                     .border(border = BorderStroke(1.dp, Black))
-                                    /*.height(100.dp)*/
                             ) {
                                 Text(
                                     text = "NOTE:",
                                     modifier = Modifier
                                         /*.align(Alignment.Top)*/
-                                        .padding(
-                                            start = 4.dp,
-                                            end = 4.dp,
-                                            top = 3.dp,
-                                            bottom = 2.dp
-                                        )
+                                        .padding(start = 4.dp, end = 4.dp, top = 3.dp, bottom = 2.dp)
                                         .height(100.dp),
                                 )
                             }
@@ -223,7 +228,15 @@ class PickingFragment : Fragment() {
                                 Text(text = "List")
                             }
                             OutlinedButton(
-                                onClick = { /*TODO*/ },
+                                onClick = { viewModel.scanItemIn()
+
+                                    /*if (itemId.value != 0) {
+                              viewModel.scanItemIn()
+                          } else {
+                              viewModel.scanItemIn()
+                          }
+                               */
+                                },
                                 modifier = Modifier
                                     .padding(4.dp)
                             ) {

@@ -82,7 +82,6 @@ class MainMenuFragment : Fragment() {
                                 ,
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            Text(text = "TEST ROW")
                         }
                     }
                 }
